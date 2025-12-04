@@ -5,7 +5,6 @@ Modul untuk simulasi Monte Carlo menggunakan Geometric Brownian Motion.
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 from io import BytesIO
 import base64
 
