@@ -6,6 +6,18 @@ Aplikasi web berbasis Streamlit untuk memprediksi Garis Kemiskinan di Kota Bandu
 
 Aplikasi ini melakukan prediksi Garis Kemiskinan (dalam Rupiah/Bulan) untuk beberapa tahun ke depan berdasarkan data historis. Metode yang digunakan adalah simulasi Monte Carlo dengan asumsi pergerakan mengikuti Geometric Brownian Motion.
 
+## ☁️ Deploy ke Streamlit Cloud
+
+1. Fork atau pastikan repository ini sudah di GitHub
+2. Buka https://share.streamlit.io/
+3. Login dengan GitHub
+4. Klik "New app"
+5. Pilih repository: `shidiqpermana/memprediksi-angka-kemiskinan-monte-carlo`
+6. Main file path: `app.py`
+7. Klik "Deploy"
+
+**Catatan**: Pastikan file data (`garis_kemiskinan_di_kota_bandung.xlsx`) sudah di-upload ke repository atau gunakan file uploader di aplikasi.
+
 ## 🚀 Fitur
 
 - **Analisis Data Historis**: Menghitung logarithmic returns dari data historis
