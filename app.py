@@ -4,6 +4,7 @@ Aplikasi Streamlit untuk prediksi Garis Kemiskinan menggunakan Monte Carlo Simul
 
 import streamlit as st
 import os
+import tempfile
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -91,7 +92,6 @@ uploaded_file = st.sidebar.file_uploader(
 data_file = None
 if uploaded_file is not None:
     # Simpan file yang di-upload ke temporary file
-    import tempfile
     with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp_file:
         tmp_file.write(uploaded_file.getvalue())
         data_file = tmp_file.name
