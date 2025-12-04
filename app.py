@@ -79,19 +79,44 @@ st.markdown('<p class="main-header">📊 Prediksi Garis Kemiskinan Kota Bandung<
             unsafe_allow_html=True)
 st.markdown("### Simulasi Monte Carlo dengan Geometric Brownian Motion")
 
-# Cari dan muat data
+# File uploader di sidebar
+st.sidebar.header("📁 Upload Data")
+uploaded_file = st.sidebar.file_uploader(
+    "Upload file data (Excel atau CSV)",
+    type=['xlsx', 'xls', 'csv'],
+    help="Upload file data yang berisi kolom 'tahun' dan 'jumlah'"
+)
+
+# Cari file data lokal (untuk development)
 data_file = None
-for file_path in POSSIBLE_DATA_FILES:
-    if os.path.exists(file_path):
-        data_file = file_path
-        break
-
-if data_file is None:
-    st.error(f"❌ File data tidak ditemukan. Mencari: {', '.join(POSSIBLE_DATA_FILES)}")
-    st.stop()
-
-# Tampilkan info file yang ditemukan
-st.sidebar.success(f"✅ File ditemukan: {data_file}")
+if uploaded_file is not None:
+    # Simpan file yang di-upload ke temporary file
+    import tempfile
+    with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(uploaded_file.name)[1]) as tmp_file:
+        tmp_file.write(uploaded_file.getvalue())
+        data_file = tmp_file.name
+    st.sidebar.success(f"✅ File di-upload: {uploaded_file.name}")
+else:
+    # Coba cari file lokal
+    for file_path in POSSIBLE_DATA_FILES:
+        if os.path.exists(file_path):
+            data_file = file_path
+            break
+    
+    if data_file is None:
+        st.warning("⚠️ File data tidak ditemukan. Silakan upload file data menggunakan sidebar di sebelah kiri.")
+        st.info("""
+        **Format file yang didukung:**
+        - Excel (.xlsx, .xls)
+        - CSV (.csv)
+        
+        **Kolom yang diperlukan:**
+        - `tahun` (atau Tahun, Year)
+        - `jumlah` (atau Jumlah, Value, Nilai, Garis Kemiskinan)
+        """)
+        st.stop()
+    else:
+        st.sidebar.success(f"✅ File ditemukan: {data_file}")
 
 # Tampilkan progress
 with st.spinner('Memuat data dan menjalankan simulasi...'):
@@ -103,6 +128,13 @@ with st.spinner('Memuat data dan menjalankan simulasi...'):
                 year_col='tahun', 
                 value_col='jumlah'
             )
+            
+            # Hapus temporary file jika dari upload
+            if uploaded_file is not None and os.path.exists(data_file):
+                try:
+                    os.unlink(data_file)
+                except:
+                    pass
         except Exception as prep_error:
             st.error(f"❌ Error saat memproses data: {str(prep_error)}")
             
